@@ -37,7 +37,7 @@
         <nombre>Dr. Carlos Fernández Gutiérrez</nombre>
         <especialidad>Dermatología</especialidad>
         <ubicacionConsulta>Clínica Árbol de Seda, consultorio 104</ubicacionConsulta>
-        <horariosConsulta>Domingo a Viernes: 13:00-20:00</horariosConsulta>
+        <horariosConsulta>Lunes a Sábado: 08:00-15:00</horariosConsulta>
         <numeroTel>999-876-5432</numeroTel>
         <correo>carlosfernandez@gmail.com</correo>
         <reseñas>Ofrece tratamientos avanzados y procedimientos estéticos de calidad. Calificación: 9.0</reseñas>
@@ -48,7 +48,7 @@
         <nombre>Dr. Juan Pérez Alvarado</nombre>
         <especialidad>Ginecología y Obstetricia</especialidad>
         <ubicacionConsulta>Clínica Árbol de Seda, consultorio 105</ubicacionConsulta>
-        <horariosConsulta>Lunes a Sábado: 08:00-15:00</horariosConsulta>
+        <horariosConsulta>Domingo a Viernes: 13:00-20:00</horariosConsulta>
         <numeroTel>123-456-7890</numeroTel>
         <correo>juanperez@gmail.com</correo>
         <reseñas>Excelente atención y profesionalismo. Calificación: 9.6</reseñas>
@@ -59,7 +59,7 @@
         <nombre>Dra. María López Masís</nombre>
         <especialidad>Odontología</especialidad>
         <ubicacionConsulta>Clínica Árbol de Seda, consultorio 106</ubicacionConsulta>
-        <horariosConsulta>Lunes a Sábado: 08:00-15:00</horariosConsulta>
+        <horariosConsulta>Domingo a Viernes: 13:00-20:00</horariosConsulta>
         <numeroTel>987-654-3210</numeroTel>
         <correo>marialopez@gmail.com</correo>
         <reseñas>Trato amable y eficiente. Calificación: 9.3</reseñas>
@@ -74,7 +74,7 @@
         <numeroTel>555-123-4567</numeroTel>
         <correo>lauragomez@gmail.com</correo>
         <reseñas>Siempre disponible y atento a las necesidades del paciente. Calificación: 9.8</reseñas>
-        <biografia>Graduado con honores de la Universidad ABC, apasionada por la medicina preventiva.</biografia>
+        <biografia>Graduada con honores de la Universidad ABC, apasionada por la medicina preventiva.</biografia>
     </medico>
     <medico>
         <idMedico>ARG-8</idMedico>
@@ -114,7 +114,7 @@
         <nombre>Dr. Manuel Gómez Díaz</nombre>
         <especialidad>Medicina General</especialidad>
         <ubicacionConsulta>Clínica Árbol de Seda, consultorio 115</ubicacionConsulta>
-        <horariosConsulta>Lunes a Sábado: 08:00-15:00</horariosConsulta>
+        <horariosConsulta>Domingo a Viernes: 13:00-20:00</horariosConsulta>
         <numeroTel>555-666-7777</numeroTel>
         <correo>manuelgomez@gmail.com</correo>
         <reseñas>Médico general de confianza, gran capacidad diagnóstica. Calificación: 9.4</reseñas>

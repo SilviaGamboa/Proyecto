@@ -57,7 +57,7 @@ const validarCedula = (cedula) => /^\d{2}-\d{4}-\d{4}$/.test(cedula);
 const manejarExito = () => {
     alert("Éxito: Los datos ingresados son válidos.");
     limpiarCamposTexto();
-    window.location.replace('servicios.html');
+    window.location.replace('agendaCitas.html');
     
 
 };

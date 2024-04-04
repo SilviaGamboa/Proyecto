@@ -316,27 +316,7 @@ li {
 
       /*------------------info doctores---------------------------*/   
 
-      /* Estilos para la superposición */
-
-      
-      .pagination button {
-        padding: 5px 10px;
-        margin: 0 5px;
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-      
-      .pagination button:hover {
-        background-color: #0056b3;
-      }
-      
-      .pagination button.active {
-        background-color: #0056b3; /* Color de fondo diferente para el botón activo */
-      }
-      
+     
 #infoCompletaOverlay {
     position: fixed;
     top: 50%;
@@ -640,6 +620,7 @@ li {
     display: flex;
     flex-direction: column;
     padding-left: 4px;
+    position: relative;
   }
   .events .event {
     position: relative;
@@ -693,20 +674,20 @@ li {
 }
 
 /* add tick in event after */
-.events .event::after {
-  content: "✓";
-  position: absolute;
-  top: 50%;
-  right: 0;
-  font-size: 3rem;
-  line-height: 1;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.3;
-  color: var(--primary-clr);
+
+/*Bonton cancelar*/
+  #cancelaCita-btn{
+  position: absolute; /* Establece la posición absoluta para el botón */
+  top: 50%; /* Ajusta la distancia desde la parte superior del contenedor */
+  right: 0; /* Ajusta la distancia desde el lado derecho del contenedor */
   transform: translateY(-50%);
+  width: 60px;
+  height: 40px;
+  color: #f0f0f0;
+  background-color: #1c6c45;
+
 }
+
 .events .event:hover::after {
   display: flex;
 }

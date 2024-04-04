@@ -17,15 +17,21 @@ document.addEventListener("DOMContentLoaded", function() {
     addEventCloseBtn = document.querySelector(".close "),
     addEventTitle = document.querySelector(".event-name "),
     addEventFrom = document.querySelector(".event-time-from "),
-    
     addEventSubmit = document.querySelector(".add-event-btn ");
-  
+
+    
+
+      let usuario=JSON.parse(localStorage.getItem('usuario'));
+      let usuariocomp=usuario._cedula;
       let today = new Date();
       let activeDay;
       let month = today.getMonth();
       let year = today.getFullYear();
       let dayName;
       let  medicos;
+      
+
+      
   
   const months = [
     "Enero",
@@ -43,6 +49,7 @@ document.addEventListener("DOMContentLoaded", function() {
     ];
   
     const eventsArr = [];
+    const eventosUsuarioArray=[];
       getEvents();
       console.log(eventsArr);
   
@@ -55,6 +62,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const lastDate = lastDay.getDate();
     const day = firstDay.getDay();
     const nextDays = 7 - lastDay.getDay() - 1;
+    
   
     date.innerHTML = months[month] + " " + year;
   
@@ -63,23 +71,29 @@ document.addEventListener("DOMContentLoaded", function() {
     for (let x = day; x > 0; x--) {
       days += `<div class="dia mes-anterior">${prevDays - x + 1}</div>`;
     }
+
+    
+
+
   
     for (let i = 1; i <= lastDate; i++) {
-      //compruebahay un evento ese día
+      //comprueba si hay un evento ese día
+     
       let event = false;
       eventsArr.forEach((eventObj) => {
         if (
           eventObj.day === i &&
           eventObj.month === month + 1 &&
-          eventObj.year === year
+          eventObj.year === year  
         ) {
           event = true;
+        
         }
       });
       if (
         i === new Date().getDate() &&
         year === new Date().getFullYear() &&
-        month === new Date().getMonth()
+        month === new Date().getMonth() 
       ) {
         activeDay = i;
         getActiveDay(i);
@@ -206,7 +220,7 @@ document.addEventListener("DOMContentLoaded", function() {
     gotoBtn.addEventListener("click", gotoDate);
     
     function gotoDate() {
-      console.log("here");
+      
       const dateArr = dateInput.value.split("/");
       if (dateArr.length === 2) {
         if (dateArr[0] > 0 && dateArr[0] < 13 && dateArr[1].length === 4) {
@@ -243,10 +257,13 @@ document.addEventListener("DOMContentLoaded", function() {
         if (
           date === event.day &&
           month + 1 === event.month &&
-          year === event.year
+          year === event.year 
         ) {
+         
           event.events.forEach((event) => {
-            events += `<div class="event">
+            if(
+              event.usuario._cedula===usuariocomp._cedula){
+                events += `<div class="event">
                 <div class="title">
                   <i class="fas fa-circle"></i>
                   <h3 class="event-title">${event.title}</h3>
@@ -254,7 +271,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 <div class="event-time">
                   <span class="event-time">${event.time}</span>
                 </div>
-            </div>`;
+                
+            </div>
+            `; 
+            }
+            
           });
         }
       });
@@ -265,6 +286,9 @@ document.addEventListener("DOMContentLoaded", function() {
       }
       eventsContainer.innerHTML = events;
       saveEvents();
+      
+      
+      
     }
     
     //funcion añadir evento
@@ -286,12 +310,8 @@ document.addEventListener("DOMContentLoaded", function() {
     addEventTitle.addEventListener("input", (e) => {
       addEventTitle.value = addEventTitle.value.slice(0, 60);
     });
-    
-   
-    
-    
-    
-   
+
+
     
     //funcion añadir eventos al array
     addEventSubmit.addEventListener("click", () => {
@@ -311,6 +331,7 @@ document.addEventListener("DOMContentLoaded", function() {
       const timeTo = convertTime(eventTimeTo);
     
       //comprobar que el evento no haya sido añadido
+      let medicoOcupado=false;
       let eventExist = false;
       eventsArr.forEach((event) => {
         if (
@@ -320,7 +341,16 @@ document.addEventListener("DOMContentLoaded", function() {
         ) {
           event.events.forEach((event) => {
             if (event.title === eventTitle || event.timeto===eventTimeTo || event.eventTimeFrom===eventTimeFrom ) {
-              eventExist = true;
+              if( event.usuario._cedula===usuariocomp._cedula){
+                eventExist = true;
+              }else{
+                if(event.timeto===eventTimeTo && event.medico===medico || event.eventTimeFrom===eventTimeFrom && event.medico===medico){
+                    medicoOcupado=true;
+                    
+                }
+
+              }
+              
             }
           });
         }
@@ -329,6 +359,12 @@ document.addEventListener("DOMContentLoaded", function() {
         alert("Ya hay una cita agendada a esa hora");
         return;
       }
+      if (eventExist) {
+        alert("Ya hay una cita agendada a esa hora");
+        return;
+      }
+
+      
       //comprueba horario medicos
      
 
@@ -337,10 +373,8 @@ document.addEventListener("DOMContentLoaded", function() {
           
           if(medico===medicos[i].getElementsByTagName('nombre')[0].textContent){
             
-            const horariodMedico = medicos[i].getElementsByTagName('horariosConsulta')[0].textContent;
-          console.log(medicos[i], horariodMedico);
-          console.log( medicosDisponibles(horariodMedico,dayName,hora));
-          console.log("horario med:",horariodMedico,dayName,hora)
+            const horariodMedico = medicos[i].getElementsByTagName('horariosConsulta')[0].textContent.trim();
+          
           return medicosDisponibles(horariodMedico,dayName,hora);
         }
       }
@@ -356,9 +390,13 @@ document.addEventListener("DOMContentLoaded", function() {
       const newEvent = {
         title: eventTitle,
         time: timeFrom + " - " + timeTo,
+        medico: medico,
+        usuario:usuario._cedula,
+        
+        comfirmada: false
       };
-      console.log(newEvent);
-      console.log(activeDay);
+      // console.log(newEvent);
+      // console.log(activeDay);
 
       let eventAdded = false;
       //aqui se agregan los eventos al calendario
@@ -367,7 +405,8 @@ document.addEventListener("DOMContentLoaded", function() {
           if (
             item.day === activeDay &&
             item.month === month + 1 &&
-            item.year === year
+            item.year === year 
+            
           ) {
             item.events.push(newEvent);
             eventAdded = true;
@@ -384,50 +423,107 @@ document.addEventListener("DOMContentLoaded", function() {
         });
       }
     
-      console.log(eventsArr);
+          console.log(eventsArr);
       addEventWrapper.classList.remove("active");
       addEventTitle.value = "";
       addEventFrom.value = "";
-      //addEventTo.value = "";
       updateEvents(activeDay);
       //selecciona el día activo y agrega la clase de evento si no se agrega
       const activeDayEl = document.querySelector(".dia.activo");
       if (!activeDayEl.classList.contains("event")) {
         activeDayEl.classList.add("event");
       }
-    });
+    });//addEventsubmit
     
-    //función para eliminar evento cuando se hace clic en el evento
+   
+    
+    //función para ver la info de la cita cuando se hace clic en el evento
     eventsContainer.addEventListener("click", (e) => {
+      const eventTitle = e.target.children[0].children[1].innerHTML;
+      
       if (e.target.classList.contains("event")) {
-        
+        eventsArr.forEach((event) => {
+          
+              if (
+                event.day === activeDay &&
+                event.month === month + 1 &&
+                event.year === year
+              ) {
+                event.events.forEach((item, index) => {
+                  if (item.title === eventTitle) {
+                    const overlay = document.createElement('div');
+        overlay.id = 'infoCompletaOverlay';
+      
+        const container = document.createElement('div');
+        container.id = 'infoCompletaContainer';
+      
+        const closeBtn = document.createElement('span');
+        closeBtn.id = 'closeInfoCompleta';
+        closeBtn.innerHTML = '&times;';
 
-        if (confirm("Esta seguro de eliminar la cita?")) {
-          const eventTitle = e.target.children[0].children[1].innerHTML;
-          eventsArr.forEach((event) => {
-            if (
-              event.day === activeDay &&
-              event.month === month + 1 &&
-              event.year === year
-            ) {
-              event.events.forEach((item, index) => {
-                if (item.title === eventTitle) {
-                  event.events.splice(index, 1);
+        const cancelarBtn = document.createElement('div');
+        cancelarBtn.id = 'cancelaCita-btn';
+        cancelarBtn.innerHTML = 'cancelar';
+      
+        const content = document.createElement('div');
+        content.innerHTML = `<h2>Informacion completa de la cita</h2> 
+                          <h3> Tipo de cita</h3><p>${item.title}</p>
+                          <h3> Fecha</h3><p>${event.day}/${event.month}/${event.year}</p>
+                          <h3> Hora</h3><p>${item.time}</p>
+                          <h3> Médico</h3><p>${item.medico}</p>
+                          <h3> Confirmada: </h3><p>${item.comfirmada}</p> `;
+                                  
+        
+      
+        closeBtn.addEventListener('click', function() {
+          overlay.remove();
+        });
+
+        //cancela cita 
+        cancelarBtn.addEventListener('click', function() {
+          if (confirm("Esta seguro de eliminar la cita?")) {
+              const eventTitle = e.target.children[0].children[1].innerHTML;
+              eventsArr.forEach((event) => {
+                if (
+                  event.day === activeDay &&
+                  event.month === month + 1 &&
+                  event.year === year
+                ) {
+                  event.events.forEach((item, index) => {
+                    if (item.title === eventTitle) {
+                      event.events.splice(index, 1);
+                    }
+                  });
+                  //if no events left in a day then remove that day from eventsArr
+                  if (event.events.length === 0) {
+                    eventsArr.splice(eventsArr.indexOf(event), 1);
+                    //remove event class from day
+                    const activeDayEl = document.querySelector(".dia.activo");
+                    if (activeDayEl.classList.contains("event")) {
+                      activeDayEl.classList.remove("event");
+                    }
+                  }
                 }
               });
-              //if no events left in a day then remove that day from eventsArr
-              if (event.events.length === 0) {
-                eventsArr.splice(eventsArr.indexOf(event), 1);
-                //remove event class from day
-                const activeDayEl = document.querySelector(".dia.activo");
-                if (activeDayEl.classList.contains("event")) {
-                  activeDayEl.classList.remove("event");
-                }
-              }
+              updateEvents(activeDay);
+              overlay.remove();
             }
-          });
-          updateEvents(activeDay);
-        }
+          
+        });
+      
+        container.appendChild(closeBtn);
+        container.appendChild(cancelarBtn);
+        container.appendChild(content);
+        overlay.appendChild(container);
+      
+        document.body.appendChild(overlay);
+                  }
+                });
+               
+              }
+            });
+        
+
       }
     });
    
@@ -483,7 +579,7 @@ document.addEventListener("DOMContentLoaded", function() {
    
            for (let i = 0; i < medicos.length; i++) {
              const especialidadMedico = medicos[i].getElementsByTagName('especialidad')[0].textContent;
-             const horariodMedico = medicos[i].getElementsByTagName('horariosConsulta')[0].textContent;
+             
 
              if (especialidadMedico.includes(opcionSeleccionada)) {
                const nombreMedico = medicos[i].getElementsByTagName('nombre')[0].textContent;
@@ -526,7 +622,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let [horaInicio, horaFin] = hora.split('-');
   let [horaInicioSelec, horaFinSelec] = horaSelec.split('-');
 
-    if(dias==="Lunes a Sabado"){
+    if(dias.includes("Lunes a Sábado")){
       horarioTrabajo.lunes = true;
       horarioTrabajo.martes = true;
       horarioTrabajo.miercoles = true;
@@ -548,10 +644,10 @@ document.addEventListener("DOMContentLoaded", function() {
     let [horarioMedFin] = horaFin.split(':').map(Number);
     let [horaSelecInic ]= horaInicioSelec.split(':').map(Number);
     let [horaSelecFin] = horaFinSelec.split(':').map(Number);
+    console.log("dentro metodo","dias",dias,"Hora",horarioMedInic,horarioMedFin, "Hora selec:", horaSelecInic, horaSelecFin  );
+    console.log(horarioTrabajo)
 
-    if(horaSelecInic>=horarioMedInic && horaSelecFin<=horarioMedFin){
-      dentroHorario=true;
-    }
+    
     if(diaSelec === "Lunes" && horarioTrabajo.lunes ||
     diaSelec === "Martes" && horarioTrabajo.martes ||
     diaSelec === "Miércoles" && horarioTrabajo.miercoles ||
@@ -564,11 +660,20 @@ document.addEventListener("DOMContentLoaded", function() {
     }else{
       dentroHorario=false;
     }
+    if(horaSelecInic>=horarioMedInic && horaSelecFin<=horarioMedFin ){
+      dentroHorario=true;
+    }else{
+      dentroHorario=false;
+    }
+
+
 
 
     return dentroHorario;
 
      }
+
+     //console.log("probandoMetodo:", medicosDisponibles( 'Lunes a Sábado: 17:00-18:00', dayName, "08:00-09:00" ));
 
 
 
